@@ -7,8 +7,8 @@
 	"main": "Ractive-Backbone.js",
 	"ignore": [
 		"**/.*",
-		"src/*",
-		"test/*",
+		"src",
+		"test",
 		"Gruntfile.js"
 	],
 	"repository": {
