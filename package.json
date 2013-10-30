@@ -1,0 +1,26 @@
+{
+	"name": "ractive-backbone",
+	"description": "Backbone adaptor for Ractive.js",
+	"version": "0.1.0",
+	"homepage": "http://ractivejs.org",
+	"author": {
+		"name": "Rich Harris"
+	},
+	"licenses": [
+		{
+			"type": "MIT"
+		}
+	],
+	"repository": {
+	  "type": "git",
+	  "url": "https://github.com/RactiveJS/plugins.adaptors.Backbone.git"
+	},
+	"devDependencies": {
+		"grunt": "~0.4.1",
+		"grunt-contrib-concat": "~0.3.0",
+		"grunt-contrib-qunit": "~0.3.0",
+		"grunt-contrib-uglify": "~0.2.5",
+		"grunt-contrib-jshint": "~0.7.0",
+		"grunt-contrib-copy": "~0.4.1"
+	}
+}
