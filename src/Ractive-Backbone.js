@@ -29,9 +29,9 @@
 	    define( function ( require ) {
 	      var Ractive = require( 'Ractive' );
 
-	      // requiring the plugins will 'activate' them - no need to use
+	      // requiring the plugin will 'activate' it - no need to use
 	      // the return value
-	      require( 'Ractive.plugins' );
+	      require( 'Ractive-Backbone' );
 	    });
 
 	Then tell Ractive to expect Backbone objects by adding an `adaptors` property:
@@ -105,7 +105,7 @@
 
 	BackboneModelWrapper.prototype = {
 		teardown: function () {
-			this.value.off( 'change', this.changeHandler );
+			this.value.off( 'change', this.modelChangeHandler );
 		},
 		get: function () {
 			return this.value.attributes;
