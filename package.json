@@ -3,6 +3,7 @@
 	"description": "Backbone adaptor for Ractive.js",
 	"version": "0.1.0",
 	"homepage": "http://ractivejs.org",
+        "main": "./Ractive-Backbone.js",
 	"author": {
 		"name": "Rich Harris"
 	},
