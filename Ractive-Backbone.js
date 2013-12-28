@@ -120,7 +120,7 @@
 		reset: function ( object ) {
 			// If the new object is a Backbone model, assume this one is
 			// being retired. Ditto if it's not a model at all
-			if ( object instanceof Backbone.Model || typeof object !== 'object' ) {
+			if ( object instanceof Backbone.Model || !(object instanceof Object) ) {
 				return false;
 			}
 
