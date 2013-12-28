@@ -3,6 +3,7 @@
 	"description": "Backbone adaptor for Ractive.js",
 	"version": "0.1.0",
 	"homepage": "http://ractivejs.org",
+        "main": "./Ractive-Backbone.js",
 	"author": {
 		"name": "Rich Harris"
 	},
@@ -14,6 +15,10 @@
 	"repository": {
 	  "type": "git",
 	  "url": "https://github.com/RactiveJS/plugins.adaptors.Backbone.git"
+	},
+	"dependencies": {
+		"backbone": "~1.1.0",
+		"ractive": "~0.3.7"
 	},
 	"devDependencies": {
 		"grunt": "~0.4.1",
