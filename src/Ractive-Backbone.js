@@ -111,10 +111,21 @@
 			return this.value.attributes;
 		},
 		set: function ( keypath, value ) {
-			// Only set if the model didn't originate the change itself, and
-			// only if it's an immediate child property
-			if ( !this.setting && keypath.indexOf( '.' ) === -1 ) {
-				this.value.set( keypath, value );	
+			// Only set if the model didn't originate the change itself
+			if ( !this.setting ) {
+				var parts = keypath.split('.');
+				var target = {};
+				var last = target;
+				for (var i in parts) {
+					var part = parts[i];
+					if (i == (parts.length - 1)) {
+						last[part] = value;
+					} else {
+						last[part] = {};
+					}
+					last = last[part];
+				}
+				this.value.set( target );
 			}
 		},
 		reset: function ( object ) {
