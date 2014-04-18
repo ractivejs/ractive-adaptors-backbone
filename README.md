@@ -7,4 +7,4 @@ TODO...
 * write some tests
 * demo/sample app
 
-See www.ractivejs.org/examples/backbone and https://github.com/Rich-Harris/Ractive/wiki/Adaptors for more info.
+See www.ractivejs.org/examples/backbone and http://docs.ractivejs.org/latest/adaptors for more info.
