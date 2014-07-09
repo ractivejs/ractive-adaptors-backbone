@@ -3,7 +3,7 @@
 	Backbone adaptor plugin
 	=======================
 
-	Version <%= VERSION %>. Copyright 2013 @rich_harris, MIT licensed.
+	Version <%= pkg.version %>. Copyright 2013 - 2014 @rich_harris, MIT licensed.
 
 	This plugin allows Ractive.js to work seamlessly with Backbone.Model and
 	Backbone.Collection instances.
