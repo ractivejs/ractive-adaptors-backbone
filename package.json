@@ -1,7 +1,7 @@
 {
 	"name": "ractive-adaptors-backbone",
 	"description": "Backbone adaptor for Ractive.js",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"homepage": "http://ractivejs.org",
         "main": "./ractive-adaptors-backbone.js",
 	"author": {
