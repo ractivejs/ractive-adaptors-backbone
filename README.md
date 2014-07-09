@@ -14,7 +14,7 @@ To get `ractive-adaptors-backbone.min.js` you can:
 
 - Use CDN: `//cdn.jsdelivr.net/ractive.adaptors-backbone/latest/ractive-adaptors-backbone.min.js`.
 - Use bower: `$ bower i ractive-backbone`.
-- [Download the latest release](https://github.com/ractivejs/ractive-load/releases/).
+- [Download the latest release](https://github.com/ractivejs/ractive-adaptors-backbone/releases).
 - Clone the repo: `$ git clone https://github.com/ractivejs/ractive-adaptors-backbone.git`.
 
 TODO...
