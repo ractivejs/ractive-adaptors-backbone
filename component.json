@@ -1,0 +1,14 @@
+{
+  "name": "ractive-backbone",
+  "repo": "RactiveJS/Ractive-adaptors-Backbone",
+  "description": "Backbone plugin for Ractive.js",
+  "version": "0.1.1",
+  "keywords": [],
+  "dependencies": {},
+  "development": {},
+  "license": "MIT",
+  "main": "Ractive-Backbone.js",
+  "scripts": [
+    "Ractive-Backbone.js"
+  ]
+}
