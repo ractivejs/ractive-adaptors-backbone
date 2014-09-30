@@ -22,4 +22,19 @@
 		t.equal( typeof Backbone.Model, 'function' );
 	});
 
+	test( 'Adaptor.filter detects models', function ( t ) {
+		var model = new Backbone.Model();
+		t.equal( Adaptor.filter(model), true );
+	});
+
+	test( 'Adaptor.filter detects collections', function ( t ) {
+		var collection = new Backbone.Collection();
+		t.equal( Adaptor.filter(collection), true );
+	});
+
+	test( 'Adaptor.filter returns false on plain objects', function ( t ) {
+		var object = {};
+		t.equal( Adaptor.filter(object), false );
+	});
+
 }());
