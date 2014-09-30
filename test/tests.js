@@ -37,4 +37,16 @@
 		t.equal( Adaptor.filter(object), false );
 	});
 
+	/*
+	test( 'Works', function ( t ) {
+		var model = new Backbone.Model();
+		var ractive = new Ractive({ adapt: ['Backbone'] });
+
+		ractive.set( 'model', model );
+		model.set( 'message', 'hello' );
+
+		t.equal( ractive.get('model.message'), 'hello' );
+	});
+	*/
+
 }());
