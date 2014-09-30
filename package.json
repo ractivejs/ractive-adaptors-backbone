@@ -1,36 +1,36 @@
 {
-  "name": "ractive-adaptors-backbone",
-  "description": "Backbone adaptor for Ractive.js",
-  "version": "0.1.1",
-  "homepage": "http://ractivejs.org",
-  "main": "./ractive-adaptors-backbone.js",
-  "author": {
-    "name": "Rich Harris"
-  },
-  "licenses": [
-    {
-      "type": "MIT"
-    }
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ractivejs/ractive-adaptors-backbone.git"
-  },
-  "dependencies": {
-    "backbone": "~1.1.0",
-    "ractive": "~0.3.9"
-  },
-  "scripts": {
-    "test": "grunt",
-    "prepublish": "grunt"
-  },
-  "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-jshint": "~0.7.0",
-    "grunt-contrib-qunit": "~0.3.0",
-    "grunt-contrib-uglify": "~0.2.5"
-  }
+	"name": "ractive-adaptors-backbone",
+	"description": "Backbone adaptor for Ractive.js",
+	"version": "0.1.1",
+	"homepage": "http://ractivejs.org",
+	"main": "./ractive-adaptors-backbone.js",
+	"author": {
+		"name": "Rich Harris"
+	},
+	"licenses": [
+		{
+			"type": "MIT"
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ractivejs/ractive-adaptors-backbone.git"
+	},
+	"dependencies": {
+		"backbone": "~1.1.0",
+		"ractive": "~0.3.9"
+	},
+	"scripts": {
+		"test": "grunt",
+		"prepublish": "grunt"
+	},
+	"devDependencies": {
+		"grunt": "~0.4.1",
+		"grunt-cli": "^0.1.13",
+		"grunt-contrib-concat": "~0.3.0",
+		"grunt-contrib-copy": "~0.4.1",
+		"grunt-contrib-jshint": "~0.7.0",
+		"grunt-contrib-qunit": "~0.3.0",
+		"grunt-contrib-uglify": "~0.2.5"
+	}
 }
