@@ -13,12 +13,13 @@ var libs = {
 };
 
 mdescribe( 'Ractive-adaptors-backbone', libs.ractive, function (Ractive, version) {
-	var Backbone, Adaptor;
+	var Backbone, Adaptor, model;
 
 	before(function () {
 		Backbone = require('backbone');
 		proxy( '../ractive-adaptors-backbone.js', { ractive: Ractive });
 		Adaptor = Ractive.adaptors.Backbone;
+		Ractive.defaults.adapt.push('Backbone');
 	});
 
 	it( 'adaptor exists and is an object', function () {
@@ -49,7 +50,7 @@ mdescribe( 'Ractive-adaptors-backbone', libs.ractive, function (Ractive, version
 
 	it( 'works', function () {
 		var model = new Backbone.Model();
-		var ractive = new Ractive({ adapt: ['Backbone'] });
+		var ractive = new Ractive();
 
 		ractive.set( 'model', model );
 		model.set( 'message', 'hello' );
