@@ -51,28 +51,28 @@
 
 	// Common JS (i.e. browserify) environment
 	if ( typeof module !== 'undefined' && module.exports && typeof require === 'function' ) {
-		factory( require( 'ractive' ), require( 'backbone' ) );
+		factory( require( 'ractive' ), require( 'underscore' ), require( 'backbone' ) );
 	}
 
 	// AMD?
 	else if ( typeof define === 'function' && define.amd ) {
-		define([ 'ractive', 'backbone' ], factory );
+		define([ 'ractive', 'underscore', 'backbone' ], factory );
 	}
 
 	// browser global
 	else if ( global.Ractive && global.Backbone ) {
-		factory( global.Ractive, global.Backbone );
+		factory( global.Ractive, global._, global.Backbone );
 	}
 
 	else {
 		throw new Error( 'Could not find Ractive or Backbone! Both must be loaded before the ractive-adaptors-backbone plugin' );
 	}
 
-}( typeof window !== 'undefined' ? window : this, function ( Ractive, Backbone ) {
+}( typeof window !== 'undefined' ? window : this, function ( Ractive, _, Backbone ) {
 
 	'use strict';
 
-	var BackboneModelWrapper, BackboneCollectionWrapper, lockProperty = '_ractiveAdaptorsBackboneLock';
+	var BackboneModelWrapper, BackboneCollectionWrapper, lockProperty = '_ractiveAdaptorsBackboneLock', debounceInterval = 50;
 
 	if ( !Ractive || !Backbone ) {
 		throw new Error( 'Could not find Ractive or Backbone! Check your paths config' );
@@ -108,11 +108,11 @@
 	BackboneModelWrapper = function ( ractive, model, keypath, prefix ) {
 		this.value = model;
 
-		model.on( 'change', this.modelChangeHandler = function () {
+		model.on( 'change', this.modelChangeHandler = _.debounce( function () {
 			var release = acquireLock( model );
 			ractive.set( prefix( model.changed ) );
 			release();
-		});
+		}, debounceInterval ));
 	};
 
 	BackboneModelWrapper.prototype = {
@@ -144,13 +144,13 @@
 	BackboneCollectionWrapper = function ( ractive, collection, keypath ) {
 		this.value = collection;
 
-		collection.on( 'add remove reset sort', this.changeHandler = function () {
+		collection.on( 'add remove reset sort', this.changeHandler = _.debounce( function () {
 			// TODO smart merge. It should be possible, if awkward, to trigger smart
 			// updates instead of a blunderbuss .set() approach
 			var release = acquireLock( collection );
 			ractive.set( keypath, collection.models );
 			release();
-		});
+		}, debounceInterval ));
 	};
 
 	BackboneCollectionWrapper.prototype = {
