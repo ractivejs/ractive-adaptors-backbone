@@ -13,7 +13,7 @@ var libs = {
 };
 
 mdescribe( 'Ractive-adaptors-backbone', libs.ractive, function (Ractive, version) {
-	var Backbone, Adaptor, model, ractive;
+	var Backbone, Adaptor, model, ractive, collection;
 
 	before(function () {
 		Backbone = require('backbone');
@@ -94,6 +94,35 @@ mdescribe( 'Ractive-adaptors-backbone', libs.ractive, function (Ractive, version
 
 			ractive.set( 'model', model );
 			ractive.set( 'model.message', 'hello' );
+		});
+	});
+
+	/*
+	 * Collections
+	 */
+
+	describe( 'collections', function () {
+		var MyModel, MyCollection, list;
+
+		beforeEach(function () {
+			MyModel = Backbone.Model.extend();
+			MyCollection = Backbone.Collection.extend({
+				model: MyModel
+			});
+		});
+
+		beforeEach(function () {
+			list = new MyCollection();
+		});
+
+		it( 'works', function () {
+			ractive = new Ractive({
+				template: '{{#list}}{{name}}{{/list}}'
+			});
+			ractive.set('list', list);
+			list.reset( [ { name: 'Moe' }, { name: 'Larry' }, { name: 'Curly' } ] );
+
+			expect(ractive.toHTML()).eql('MoeLarryCurly');
 		});
 	});
 
