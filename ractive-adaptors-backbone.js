@@ -72,10 +72,24 @@
 
 	'use strict';
 
-	var BackboneModelWrapper, BackboneCollectionWrapper;
+	var BackboneModelWrapper, BackboneCollectionWrapper, lockProperty = '_ractiveAdaptorsBackboneLock';
 
 	if ( !Ractive || !Backbone ) {
 		throw new Error( 'Could not find Ractive or Backbone! Check your paths config' );
+	}
+
+	function acquireLock( key ) {
+		key[lockProperty] = ( key[lockProperty] || 0 ) + 1;
+		return function release() {
+			key[lockProperty] -= 1;
+			if ( !key[lockProperty] ) {
+				delete key[lockProperty];
+			}
+		};
+	}
+
+	function isLocked( key ) {
+		return !!key[lockProperty];
 	}
 
 	Ractive.adaptors.Backbone = {
@@ -92,14 +106,12 @@
 	};
 
 	BackboneModelWrapper = function ( ractive, model, keypath, prefix ) {
-		var wrapper = this;
-
 		this.value = model;
 
 		model.on( 'change', this.modelChangeHandler = function () {
-			wrapper.setting = true;
+			var release = acquireLock( model );
 			ractive.set( prefix( model.changed ) );
-			wrapper.setting = false;
+			release();
 		});
 	};
 
@@ -113,7 +125,7 @@
 		set: function ( keypath, value ) {
 			// Only set if the model didn't originate the change itself, and
 			// only if it's an immediate child property
-			if ( !this.setting && keypath.indexOf( '.' ) === -1 ) {
+			if ( !isLocked( this.value ) && keypath.indexOf( '.' ) === -1 ) {
 				this.value.set( keypath, value );
 			}
 		},
@@ -130,16 +142,14 @@
 	};
 
 	BackboneCollectionWrapper = function ( ractive, collection, keypath ) {
-		var wrapper = this;
-
 		this.value = collection;
 
 		collection.on( 'add remove reset sort', this.changeHandler = function () {
 			// TODO smart merge. It should be possible, if awkward, to trigger smart
 			// updates instead of a blunderbuss .set() approach
-			wrapper.setting = true;
+			var release = acquireLock( collection );
 			ractive.set( keypath, collection.models );
-			wrapper.setting = false;
+			release();
 		});
 	};
 
@@ -151,7 +161,7 @@
 			return this.value.models;
 		},
 		reset: function ( models ) {
-			if ( this.setting ) {
+			if ( isLocked( this.value ) ) {
 				return;
 			}
 
