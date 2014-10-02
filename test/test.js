@@ -17,16 +17,16 @@ var libs = {
 };
 
 function tests( name, fn ) {
-	mdescribe( 'Ractive', libs.ractive, function (Ractive, version) {
-		mdescribe( 'Backbone', libs.backbone, function (Backbone, version) {
+	mdescribe( 'Ractive', libs.ractive, function ( Ractive, version ) {
+		mdescribe( 'Backbone', libs.backbone, function ( Backbone, version ) {
 			describe( name, function () {
-				fn(Ractive, Backbone);
+				fn( Ractive, Backbone );
 			});
 		});
 	});
 }
 
-tests( 'Ractive-adaptors-backbone', function (Ractive, Backbone) {
+tests( 'Ractive-adaptors-backbone', function ( Ractive, Backbone ) {
 	var Adaptor, model, ractive, collection;
 
 	/*
@@ -40,7 +40,7 @@ tests( 'Ractive-adaptors-backbone', function (Ractive, Backbone) {
 		});
 
 		Adaptor = Ractive.adaptors.Backbone;
-		Ractive.defaults.adapt.push('Backbone');
+		Ractive.defaults.adapt.push( 'Backbone' );
 	});
 
 	/*
