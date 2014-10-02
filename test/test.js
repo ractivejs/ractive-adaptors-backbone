@@ -6,21 +6,46 @@ var proxy     = require( 'proxyquire' );
 
 var libs = {
 	ractive: {
-		'0.6.0': require( '../vendor/ractive/edge/ractive.js' ),
-		'0.5.8': require( '../vendor/ractive/0.5.8/ractive.js' ),
-		'0.5.0': require( '../vendor/ractive/0.5.0/ractive.js' ),
+		'0.6.0': require( '../vendor/ractive/ractive-edge.js' ),
+		'0.5.8': require( '../vendor/ractive/ractive-0.5.8.js' ),
+		'0.5.0': require( '../vendor/ractive/ractive-0.5.0.js' ),
 	},
+	backbone: {
+		'1.1.2': require( '../vendor/backbone/backbone-1.1.2.js' ),
+		'1.0.0': require( '../vendor/backbone/backbone-1.0.0.js' ),
+	}
 };
 
-mdescribe( 'Ractive-adaptors-backbone', libs.ractive, function (Ractive, version) {
-	var Backbone, Adaptor, model, ractive, collection;
+function tests( name, fn ) {
+	mdescribe( 'Ractive', libs.ractive, function (Ractive, version) {
+		mdescribe( 'Backbone', libs.backbone, function (Backbone, version) {
+			describe( name, function () {
+				fn(Ractive, Backbone);
+			});
+		});
+	});
+}
+
+tests( 'Ractive-adaptors-backbone', function (Ractive, Backbone) {
+	var Adaptor, model, ractive, collection;
+
+	/*
+	 * Load the library
+	 */
 
 	before(function () {
-		Backbone = require('backbone');
-		proxy( '../ractive-adaptors-backbone.js', { ractive: Ractive });
+		proxy( '../ractive-adaptors-backbone.js', {
+			ractive: Ractive,
+			backbone: Backbone
+		});
+
 		Adaptor = Ractive.adaptors.Backbone;
 		Ractive.defaults.adapt.push('Backbone');
 	});
+
+	/*
+	 * Basic sanity tests
+	 */
 
 	describe( 'Sanity tests', function () {
 
