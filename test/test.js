@@ -120,6 +120,14 @@ tests( 'Ractive-adaptors-backbone', function (Ractive, Backbone) {
 			ractive.set( 'model', model );
 			ractive.set( 'model.message', 'hello' );
 		});
+
+		// See: https://github.com/ractivejs/ractive-adaptors-backbone/pull/12
+		it.skip( 'works with POJO reset', function () {
+			ractive.set( 'model', model );
+			ractive.set( 'model', { message: 'hello' } );
+
+			expect( model.get('message') ).eql( 'hello' );
+		});
 	});
 
 	/*
@@ -138,17 +146,37 @@ tests( 'Ractive-adaptors-backbone', function (Ractive, Backbone) {
 
 		beforeEach(function () {
 			list = new MyCollection();
-		});
-
-		it( 'works', function () {
 			ractive = new Ractive({
 				template: '{{#list}}{{name}}{{/list}}'
 			});
 			ractive.set('list', list);
 			list.reset( [ { name: 'Moe' }, { name: 'Larry' }, { name: 'Curly' } ] );
+		});
 
-			expect(ractive.toHTML()).eql('MoeLarryCurly');
+		it( 'works', function () {
+			expect( ractive.toHTML() ).eql( 'MoeLarryCurly' );
+		});
+
+		it( 'responds to model changes', function () {
+			var moe = list.at( 0 );
+			moe.set( 'name', 'Joe' );
+			expect( ractive.toHTML() ).eql( 'JoeLarryCurly' );
+		});
+
+		it( 'responds to deletions', function () {
+			var moe = list.at( 0 );
+			list.remove( moe );
+			expect( ractive.toHTML() ).eql( 'LarryCurly' );
+		});
+
+		it( 'responds to additions', function () {
+			list.push({ name: 'Susy' });
+			expect( ractive.toHTML() ).eql( 'MoeLarryCurlySusy' );
 		});
 	});
+
+	/*
+	 * Nested collections
+	 */
 
 });
