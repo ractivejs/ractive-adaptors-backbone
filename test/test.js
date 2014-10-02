@@ -13,7 +13,7 @@ var libs = {
 };
 
 mdescribe( 'Ractive-adaptors-backbone', libs.ractive, function (Ractive, version) {
-	var Backbone, Adaptor, model;
+	var Backbone, Adaptor, model, ractive;
 
 	before(function () {
 		Backbone = require('backbone');
@@ -22,14 +22,22 @@ mdescribe( 'Ractive-adaptors-backbone', libs.ractive, function (Ractive, version
 		Ractive.defaults.adapt.push('Backbone');
 	});
 
-	it( 'adaptor exists and is an object', function () {
-		expect( Ractive.adaptors.Backbone ).is.a( 'object' );
+	describe( 'Sanity tests', function () {
+
+		it( 'adaptor exists and is an object', function () {
+			expect( Ractive.adaptors.Backbone ).is.a( 'object' );
+		});
+
+		it( 'Backbone exists', function () {
+			expect( Backbone ).is.a( 'object' );
+			expect( Backbone.Model ).is.a( 'function' );
+		});
+
 	});
 
-	it( 'Backbone exists', function () {
-		expect( Backbone ).is.a( 'object' );
-		expect( Backbone.Model ).is.a( 'function' );
-	});
+	/*
+	 * Adaptor filter
+	 */
 
 	describe( 'filter', function () {
 		it( 'detects models', function () {
@@ -48,14 +56,45 @@ mdescribe( 'Ractive-adaptors-backbone', libs.ractive, function (Ractive, version
 		});
 	});
 
-	it( 'works', function () {
-		var model = new Backbone.Model();
-		var ractive = new Ractive();
+	/*
+	 * Models
+	 */
 
-		ractive.set( 'model', model );
-		model.set( 'message', 'hello' );
+	describe( 'models', function () {
+		beforeEach(function () {
+			model = new Backbone.Model();
+			ractive = new Ractive();
+		});
 
-		expect( ractive.get('model.message') ).eql( 'hello' );
+		it( 'works', function () {
+			ractive.set( 'model', model );
+			model.set( 'message', 'hello' );
+
+			expect( ractive.get('model.message') ).eql( 'hello' );
+		});
+
+		it( 'sees model values before', function () {
+			model = new Backbone.Model({ message: 'hello' });
+			ractive.set( 'model', model );
+
+			expect( ractive.get('model.message') ).eql( 'hello' );
+		});
+
+		it( 'propagates changes back to the model', function () {
+			ractive.set( 'model', model );
+			ractive.set( 'model.message', 'hello' );
+
+			expect( ractive.get('model.message') ).eql( 'hello' );
+		});
+
+		it( 'accounts for model listeners', function (next) {
+			model.on( 'change:message', function ( m, a, b ) {
+				next();
+			});
+
+			ractive.set( 'model', model );
+			ractive.set( 'model.message', 'hello' );
+		});
 	});
 
 });
