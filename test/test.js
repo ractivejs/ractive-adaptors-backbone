@@ -1,17 +1,23 @@
 /* jshint expr: true */
 require( 'mocha-clean/brief' );
-var expect = require( 'chai' ).expect;
-var proxy = require( 'proxyquire' );
+var mdescribe = require( 'mocha-repeat' );
+var expect    = require( 'chai' ).expect;
+var proxy     = require( 'proxyquire' );
 
-describe( 'Ractive-adaptors-backbone', function () {
-	var Ractive, Backbone, Adaptor;
+var libs = {
+	ractive: {
+		'0.6.0': require( '../vendor/ractive/edge/ractive.js' ),
+		'0.5.8': require( '../vendor/ractive/0.5.8/ractive.js' ),
+		'0.5.0': require( '../vendor/ractive/0.5.0/ractive.js' ),
+	},
+};
+
+mdescribe( 'Ractive-adaptors-backbone', libs.ractive, function (Ractive, version) {
+	var Backbone, Adaptor;
 
 	before(function () {
-		Ractive = require('../vendor/ractive/edge/ractive.js');
 		Backbone = require('backbone');
-		proxy( '../ractive-adaptors-backbone.js', {
-			ractive: Ractive
-		});
+		proxy( '../ractive-adaptors-backbone.js', { ractive: Ractive });
 		Adaptor = Ractive.adaptors.Backbone;
 	});
 
@@ -41,7 +47,7 @@ describe( 'Ractive-adaptors-backbone', function () {
 		});
 	});
 
-	it( 'Works', function () {
+	it( 'works', function () {
 		var model = new Backbone.Model();
 		var ractive = new Ractive({ adapt: ['Backbone'] });
 
