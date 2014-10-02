@@ -1,0 +1,20 @@
+{
+  "name": "ractive-adaptors-backbone",
+  "repository": "ractivejs/ractive-adaptors-backbone",
+  "description": "Backbone adaptor for Ractive.js",
+  "version": "0.1.1",
+  "keywords": [
+    "backbone",
+    "ractive",
+    "data binding",
+    "templates"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "ractivejs/ractive": "*"
+  },
+  "main": "ractive-adaptors-backbone.js",
+  "scripts": [
+    "ractive-adaptors-backbone.js"
+  ]
+}
