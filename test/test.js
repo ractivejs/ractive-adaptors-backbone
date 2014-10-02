@@ -216,4 +216,46 @@ tests( 'Ractive-adaptors-backbone', function ( Ractive, Backbone ) {
 	 * Nested collections
 	 */
 
+	describe( 'nested collections', function () {
+		var submodel, sublist, model, list;
+
+		beforeEach(function () {
+			submodel = new Backbone.Model({ message: 'hello' });
+			sublist = new Backbone.Collection( [ submodel ] );
+			model = new Backbone.Model({ sublist: sublist });
+			list = new Backbone.Collection( [ model ] );
+
+			ractive = new Ractive({
+				template: '{{#list}}{{heading}}{{#sublist}}{{message}}{{/sublist}}{{/list}}'
+			});
+
+			ractive.set('list', list);
+		});
+
+		it( 'works', function () {
+			expect( ractive.get( 'list.0.sublist.0.message' ) ).eql( 'hello' );
+		});
+
+		it( 'renders HTML', function () {
+			expect( ractive.toHTML() ).eql( 'hello' );
+		});
+
+		it( 'responds to changes in submodel', function () {
+			submodel.set( 'message', 'hola' );
+			expect( ractive.toHTML() ).eql( 'hola' );
+		});
+
+		it( 'responds to sublist additions', function () {
+			sublist.push( new Backbone.Model({ message: 'howdy' }) );
+			expect( ractive.toHTML() ).eql( 'hellohowdy' );
+		});
+
+		it( 'responds to sublist deletions', function () {
+			var m = new Backbone.Model({ message: 'howdy' });
+			sublist.push(m);
+			sublist.remove(m);
+			expect( ractive.toHTML() ).eql( 'hello' );
+		});
+	});
+
 });
