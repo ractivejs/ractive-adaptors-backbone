@@ -128,6 +128,38 @@ tests( 'Ractive-adaptors-backbone', function (Ractive, Backbone) {
 
 			expect( model.get('message') ).eql( 'hello' );
 		});
+
+	});
+
+	/*
+	 * Model reset
+	 */
+
+	describe( 'resetting to new models', function () {
+		var newModel;
+
+		beforeEach(function () {
+			ractive = new Ractive({ template: "{{#model}}{{name}}{{/model}}" });
+			model = new Backbone.Model({ name: "Louie" });
+			newModel = new Backbone.Model({ name: "Miles" });
+
+			ractive.set( 'model', model );
+			ractive.set( 'model', newModel );
+		});
+
+		it( 'handles resetting to new models', function () {
+			expect( ractive.get('model').cid ).eql( newModel.cid );
+		});
+
+		it( 'stops listening to old model', function () {
+			model.set( 'name', 'Ella' );
+			expect( ractive.toHTML() ).eql( 'Miles' );
+		});
+
+		it( 'listens to the new model', function () {
+			newModel.set( 'name', 'Frank' );
+			expect( ractive.toHTML() ).eql( 'Frank' );
+		});
 	});
 
 	/*
@@ -172,6 +204,11 @@ tests( 'Ractive-adaptors-backbone', function (Ractive, Backbone) {
 		it( 'responds to additions', function () {
 			list.push({ name: 'Susy' });
 			expect( ractive.toHTML() ).eql( 'MoeLarryCurlySusy' );
+		});
+
+		it( 'handles resets', function () {
+			ractive.set('list', [ { name: 'Homer' }, { name: 'Bart' } ] );
+			expect( ractive.toHTML() ).eql( 'HomerBart' );
 		});
 	});
 
