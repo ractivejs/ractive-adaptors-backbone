@@ -17,10 +17,5 @@ To get `ractive-adaptors-backbone.min.js` you can:
 - [Download the latest release](https://github.com/ractivejs/ractive-adaptors-backbone/releases).
 - Clone the repo: `$ git clone https://github.com/ractivejs/ractive-adaptors-backbone.git`.
 
-TODO...
-
-* write a readme
-* write some tests
-* demo/sample app
-
-See http://examples.ractivejs.org/backbone and http://docs.ractivejs.org/latest/adaptors for more info.
+See http://examples.ractivejs.org/backbone and 
+http://docs.ractivejs.org/latest/adaptors for more info.
