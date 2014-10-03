@@ -108,11 +108,19 @@
 	BackboneModelWrapper = function ( ractive, model, keypath, prefix ) {
 		this.value = model;
 
-		model.on( 'change', this.modelChangeHandler = _.debounce( function () {
+		var changed = {};
+		var doUpdate = _.debounce( function () {
 			var release = acquireLock( model );
-			ractive.set( prefix( model.changed ) );
+			ractive.set( prefix( changed ) );
 			release();
-		}, debounceInterval ));
+			changed = {};
+		}, debounceInterval );
+
+		model.on( 'change', this.modelChangeHandler = function () {
+			// accumulate all changes between debounced doUpdate call
+			_.extend(changed, model.changed);
+			doUpdate();
+		});
 	};
 
 	BackboneModelWrapper.prototype = {
