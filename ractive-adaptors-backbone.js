@@ -173,7 +173,7 @@
 			}
 
 			// Otherwise if this is a plain array, reset the collection
-			this.value.reset( models );
+			this.value.reset( models, { silent: true });
 		}
 	};
 
