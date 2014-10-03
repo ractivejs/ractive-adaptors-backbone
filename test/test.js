@@ -213,9 +213,18 @@ tests( 'Ractive-adaptors-backbone', function ( Ractive, Backbone ) {
 			expect( ractive.toHTML() ).eql( 'MoeLarryCurlySusy' );
 		});
 
-		it( 'handles resets', function () {
+		it( 'handles resets to array', function () {
 			ractive.set('list', [ { name: 'Homer' }, { name: 'Bart' } ] );
 			expect( ractive.toHTML() ).eql( 'HomerBart' );
+		});
+
+		it( 'handles resets to another collection', function () {
+			var newCollection = new MyCollection([
+				{ name: 'George' }, { name: 'Ringo' }
+			]);
+
+			ractive.set('list', newCollection);
+			expect( ractive.toHTML() ).eql( 'GeorgeRingo' );
 		});
 	});
 
