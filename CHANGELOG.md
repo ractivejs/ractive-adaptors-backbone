@@ -1,7 +1,7 @@
 ## v0.2.0 - unreleased
 
-* Fix infinite loop issue that arises when one model is wrapped twice.  
-(@anton-ryzhov, 21)
+* Fix infinite loop issue that arises when one model is wrapped twice.
+  (@anton-ryzhov, 21)
 
 * Fix nested collections support. (#13)
 
@@ -9,11 +9,11 @@
 
 * List Backbone and Ractive as peer dependencies. (@rstacruz, #19)
 
-* Update required versions of Backbone and Ractive to allow future versions.  
-(@rstacruz, #19)
+* Update required versions of Backbone and Ractive to allow future versions.
+  (@rstacruz, #19)
 
-* Use Backbone's `model.set` instead of `model.reset`. Fixes Backbone 1.1.2 
-support. (@browniefed, #12, #10)
+* Use Backbone's `model.set` instead of `model.reset`. Fixes Backbone 1.1.2
+  support. (@browniefed, #12, #10)
 
 ## v0.1.1 - June 9, 2014
 
