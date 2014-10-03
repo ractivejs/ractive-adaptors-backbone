@@ -9,8 +9,12 @@
 
 ## v0.1.1 - June 9, 2014
 
-* ...
+* BREAKING CHANGE: Rename to `ractive-adaptors-backbone`.
+
+* Fix `reset` issue when performing `set('model', null)`. (@bartsqueezy, #3)
+
+* Fix browserify compatibility. (@ahdinosaur, #1)
 
 ## v0.1.0 - October 30, 2013
 
-* Initial release.
+* Initial release as `ractive-backbone`.
