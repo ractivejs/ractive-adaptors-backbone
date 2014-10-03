@@ -1,5 +1,7 @@
 ## v0.2.0 - unreleased
 
+This release brings better compatibility with Ractive 0.6.x and Backbone 1.1.x.
+
 * Fix infinite loop issue that arises when one model is wrapped twice.
   (@anton-ryzhov, 21)
 
