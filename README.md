@@ -2,7 +2,7 @@
 Ractive.js Backbone adaptor
 ===========================
 
-Use Backbone models and collections in your Ractive components.<br>
+Use Backbone models and collections in your [Ractive] components.<br>
 **[View demo ›][Example]**
 
 [![Status](http://img.shields.io/travis/ractivejs/ractive-adaptors-backbone/master.svg?style=flat)](https://travis-ci.org/ractivejs/ractive-adaptors-backbone "See test builds")
@@ -35,3 +35,4 @@ To get `ractive-adaptors-backbone.min.js` you can:
 - [Download the latest release](https://github.com/ractivejs/ractive-adaptors-backbone/releases).
 
 [Example]: http://examples.ractivejs.org/backbone
+[Ractive]: http://www.ractivejs.org
