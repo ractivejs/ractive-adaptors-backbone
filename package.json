@@ -16,9 +16,9 @@
 		"type": "git",
 		"url": "https://github.com/ractivejs/ractive-adaptors-backbone.git"
 	},
-	"dependencies": {
-		"backbone": "~1.1.0",
-		"ractive": "~0.3.9"
+	"peerDependencies": {
+		"backbone": "> 1.0.0",
+		"ractive": ">= 0.3.9"
 	},
 	"scripts": {
 		"test": "mocha",
