@@ -30,6 +30,10 @@ To get `ractive-adaptors-backbone.min.js` you can:
 
     $ bower i ractive-backbone
     
+#### Use npm
+
+    $ npm install --save-dev ractivejs/ractive-adaptors-backbone
+
 #### Download
 
 - [Download the latest release](https://github.com/ractivejs/ractive-adaptors-backbone/releases).
