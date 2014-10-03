@@ -145,7 +145,8 @@
 			}
 
 			// Otherwise if this is a POJO, reset the model
-			this.value.reset( object );
+			//Backbone 1.1.2 no longer has reset and just uses set
+			this.value.set( object );
 		}
 	};
 
