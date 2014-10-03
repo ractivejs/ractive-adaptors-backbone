@@ -72,7 +72,7 @@
 
 	'use strict';
 
-	var BackboneModelWrapper, BackboneCollectionWrapper, lockProperty = '_ractiveAdaptorsBackboneLock', debounceInterval = 50;
+	var BackboneModelWrapper, BackboneCollectionWrapper, lockProperty = '_ractiveAdaptorsBackboneLock';
 
 	if ( !Ractive || !Backbone ) {
 		throw new Error( 'Could not find Ractive or Backbone! Check your paths config' );
@@ -114,7 +114,7 @@
 			ractive.set( prefix( changed ) );
 			release();
 			changed = {};
-		}, debounceInterval );
+		}, 0 );	// merge sequential calls only from one tick
 
 		model.on( 'change', this.modelChangeHandler = function () {
 			// accumulate all changes between debounced doUpdate call
@@ -158,7 +158,7 @@
 			var release = acquireLock( collection );
 			ractive.set( keypath, collection.models );
 			release();
-		}, debounceInterval ));
+		}, 0 ));	// merge sequential calls only from one tick
 	};
 
 	BackboneCollectionWrapper.prototype = {
