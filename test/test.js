@@ -129,7 +129,7 @@ tests( 'Ractive-adaptors-backbone', function ( Ractive, Backbone ) {
 		});
 
 		// See: https://github.com/ractivejs/ractive-adaptors-backbone/pull/12
-		it.skip( 'works with POJO reset', function () {
+		it( 'works with POJO reset', function () {
 			ractive.set( 'model', model );
 			ractive.set( 'model', { message: 'hello' } );
 

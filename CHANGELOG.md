@@ -12,6 +12,9 @@
 * Update required versions of Backbone and Ractive to allow future versions.  
 (@rstacruz, #19)
 
+* Use Backbone's `model.set` instead of `model.reset`. Fixes Backbone 1.1.2 
+support. (@browniefed, #12, #10)
+
 ## v0.1.1 - June 9, 2014
 
 * BREAKING CHANGE: Rename to `ractive-adaptors-backbone`.
