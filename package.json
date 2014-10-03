@@ -16,9 +16,9 @@
 		"type": "git",
 		"url": "https://github.com/ractivejs/ractive-adaptors-backbone.git"
 	},
-	"dependencies": {
-		"backbone": "~1.1.0",
-		"ractive": "~0.3.9"
+	"peerDependencies": {
+		"backbone": ">= 1.0.0",
+		"ractive": ">= 0.3.9"
 	},
 	"scripts": {
 		"test": "mocha",
@@ -26,6 +26,7 @@
 		"prepublish": "grunt"
 	},
 	"devDependencies": {
+		"backbone": ">= 1.0.0",
 		"chai": "^1.9.2",
 		"grunt": "~0.4.1",
 		"grunt-cli": "^0.1.13",
@@ -38,6 +39,7 @@
 		"mocha-clean": "^0.2.1",
 		"mocha-repeat": "^0.1.0",
 		"proxyquire": "^1.0.1",
+		"ractive": ">= 0.3.9",
 		"underscore": "^1.7.0"
 	}
 }

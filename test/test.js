@@ -9,6 +9,7 @@ var libs = {
 		'0.6.0': require( '../vendor/ractive/ractive-edge.js' ),
 		'0.5.8': require( '../vendor/ractive/ractive-0.5.8.js' ),
 		'0.5.0': require( '../vendor/ractive/ractive-0.5.0.js' ),
+		'0.4.0': require( '../vendor/ractive/ractive-0.4.0.js' ),
 	},
 	backbone: {
 		'1.1.2': require( '../vendor/backbone/backbone-1.1.2.js' ),
@@ -88,7 +89,13 @@ tests( 'Ractive-adaptors-backbone', function ( Ractive, Backbone ) {
 	describe( 'models', function () {
 		beforeEach(function () {
 			model = new Backbone.Model();
-			ractive = new Ractive();
+		});
+
+		beforeEach(function () {
+			if (Ractive.VERSION === '0.4.0')
+				ractive = new Ractive({ adaptor: '' });
+			else
+				ractive = new Ractive();
 		});
 
 		it( 'works', function () {
