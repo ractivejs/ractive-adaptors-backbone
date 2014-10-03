@@ -21,7 +21,7 @@
 		"ractive": ">= 0.3.9"
 	},
 	"scripts": {
-		"test": "mocha",
+		"test": "jshint ractive-adaptors-backbone.js && mocha",
 		"coverage": "(cp ractive-adaptors-backbone.js ractive-adaptors-backbone.js~; jscoverage ractive-adaptors-backbone.js; mv ractive-adaptors-backbone-cov.js ractive-adaptors-backbone.js; mocha -R html-cov > coverage.html); mv ractive-adaptors-backbone.js~ ractive-adaptors-backbone.js",
 		"prepublish": "uglifyjs -m < ractive-adaptors-backbone.js > ractive-adaptors-backbone.min.js"
 	},
