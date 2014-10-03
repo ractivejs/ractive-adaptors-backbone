@@ -9,6 +9,8 @@ This release brings better compatibility with Ractive 0.6.x and Backbone 1.1.x.
 
 * Internal: update test suite to Mocha. (@rstacruz, #17, #18)
 
+* Internal: remove Grunt dependency. (@rstacruz, #25, #26)
+
 * List Backbone and Ractive as peer dependencies. (@rstacruz, #19)
 
 * Update required versions of Backbone and Ractive to allow future versions.
