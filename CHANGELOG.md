@@ -5,6 +5,8 @@
 
 * Fix nested collections support. (#13)
 
+* Internal: update test suite to Mocha. (@rstacruz, #17, #18)
+
 ## v0.1.1 - June 9, 2014
 
 * ...
