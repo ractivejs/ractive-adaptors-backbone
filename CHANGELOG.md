@@ -9,6 +9,9 @@
 
 * List Backbone and Ractive as peer dependencies. (@rstacruz, #19)
 
+* Update required versions of Backbone and Ractive to allow future versions.  
+(@rstacruz, #19)
+
 ## v0.1.1 - June 9, 2014
 
 * BREAKING CHANGE: Rename to `ractive-adaptors-backbone`.
