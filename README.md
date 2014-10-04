@@ -27,7 +27,7 @@ To get `ractive-adaptors-backbone.min.js` you can:
     
 #### Use bower
 
-    $ bower i ractive-backbone
+    $ bower i ractive-adaptors-backbone
     
 #### Use npm
 
