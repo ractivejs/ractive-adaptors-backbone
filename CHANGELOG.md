@@ -1,4 +1,4 @@
-## v0.2.0 - unreleased
+## v0.2.0 - October 4, 2014
 
 This release brings better compatibility with Ractive 0.6.x and Backbone 1.1.x.
 
