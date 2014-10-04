@@ -7,7 +7,6 @@ Use Backbone models and collections in your [Ractive] components.<br>
 
 [![Status](http://img.shields.io/travis/ractivejs/ractive-adaptors-backbone/master.svg?style=flat)](https://travis-ci.org/ractivejs/ractive-adaptors-backbone "See test builds")
 
-
 *Find more Ractive.js plugins at 
 [docs.ractivejs.org/latest/plugins](http://docs.ractivejs.org/latest/plugins)*
 
@@ -32,7 +31,7 @@ To get `ractive-adaptors-backbone.min.js` you can:
     
 #### Use npm
 
-    $ npm install --save-dev ractivejs/ractive-adaptors-backbone
+    $ npm install --save-dev ractive-adaptors-backbone
 
 #### Download
 
