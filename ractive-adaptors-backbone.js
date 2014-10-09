@@ -78,18 +78,20 @@
 		throw new Error( 'Could not find Ractive or Backbone! Check your paths config' );
 	}
 
-	function acquireLock( key ) {
-		key[lockProperty] = ( key[lockProperty] || 0 ) + 1;
+	function acquireLock( key, name ) {
+		var namedLockProperty = lockProperty + ( name || '' );
+		key[ namedLockProperty ] = ( key[ namedLockProperty ] || 0 ) + 1;
 		return function release() {
-			key[lockProperty] -= 1;
-			if ( !key[lockProperty] ) {
-				delete key[lockProperty];
+			key[ namedLockProperty ] -= 1;
+			if ( !key[ namedLockProperty ] ) {
+				delete key[ namedLockProperty ];
 			}
 		};
 	}
 
-	function isLocked( key ) {
-		return !!key[lockProperty];
+	function isLocked( key, name ) {
+		var namedLockProperty = lockProperty + ( name || '' );
+		return !!key[ namedLockProperty ];
 	}
 
 	Ractive.adaptors.Backbone = {
@@ -109,7 +111,7 @@
 		this.value = model;
 
 		model.on( 'change', this.modelChangeHandler = function () {
-			var release = acquireLock( model );
+			var release = acquireLock( model, 'set' );
 			ractive.set( prefix( model.changed ) );
 			release();
 		});
@@ -125,7 +127,7 @@
 		set: function ( keypath, value ) {
 			// Only set if the model didn't originate the change itself, and
 			// only if it's an immediate child property
-			if ( !isLocked( this.value ) && keypath.indexOf( '.' ) === -1 ) {
+			if ( !isLocked( this.value, 'set' ) && keypath.indexOf( '.' ) === -1 ) {
 				this.value.set( keypath, value );
 			}
 		},
@@ -148,7 +150,7 @@
 		collection.on( 'add remove reset sort', this.changeHandler = function () {
 			// TODO smart merge. It should be possible, if awkward, to trigger smart
 			// updates instead of a blunderbuss .set() approach
-			var release = acquireLock( collection );
+			var release = acquireLock( collection, 'set' );
 			ractive.set( keypath, collection.models );
 			release();
 		});
@@ -162,7 +164,7 @@
 			return this.value.models;
 		},
 		reset: function ( models ) {
-			if ( isLocked( this.value ) ) {
+			if ( isLocked( this.value, 'set' ) ) {
 				return;
 			}
 
