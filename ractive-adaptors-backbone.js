@@ -72,7 +72,9 @@
 
 	'use strict';
 
-	var BackboneModelWrapper, BackboneCollectionWrapper, lockProperty = '_ractiveAdaptorsBackboneLock';
+	var BackboneModelWrapper, BackboneCollectionWrapper;
+	var lockProperty = '_ractiveAdaptorsBackboneLock';
+	var originalSyncProperty = '_ractiveAdaptorsBackboneOriginalSync';
 
 	if ( !Ractive || !Backbone ) {
 		throw new Error( 'Could not find Ractive or Backbone! Check your paths config' );
@@ -154,10 +156,47 @@
 			ractive.set( keypath, collection.models );
 			release();
 		});
+
+		if ( !collection.hasOwnProperty( originalSyncProperty ) ) {
+			// Patch sync method if not patched
+			var originalSync = collection.sync;
+			collection[ originalSyncProperty ] = collection.hasOwnProperty('sync') ? originalSync : null;
+			collection.sync = function ractivePatchedSync( method, model, options ) {
+				options = options || {};
+
+				var originalSuccess = options.success;
+				if ( originalSuccess ) {
+					options.success = function ( resp ) {
+						var release = acquireLock( collection, 'syncSuccess' );
+						var result = originalSuccess.apply( this, arguments );
+						release();
+						return result;
+					};
+				}
+
+				return originalSync.apply( this, arguments );
+			};
+		}
+		this.releaseSyncPatch = acquireLock( collection, 'syncPatch' );	// Count patch users
 	};
 
 	BackboneCollectionWrapper.prototype = {
 		teardown: function () {
+			var collection = this.value;
+
+			this.releaseSyncPatch();
+			if ( !isLocked( collection, 'syncPatch' ) ) {
+				// Cleanup, return original sync
+				if ( collection[ originalSyncProperty ] ) {
+					// We had object-owned method
+					collection.sync = collection[ originalSyncProperty ];
+					delete collection[ originalSyncProperty ];
+				} else {
+					// Use prototype method
+					delete collection.sync;
+				}
+			}
+
 			this.value.off( 'add remove reset sort', this.changeHandler );
 		},
 		get: function () {
