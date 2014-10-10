@@ -75,6 +75,7 @@
 	var BackboneModelWrapper, BackboneCollectionWrapper;
 	var lockProperty = '_ractiveAdaptorsBackboneLock';
 	var originalSyncProperty = '_ractiveAdaptorsBackboneOriginalSync';
+	var BackboneCollectionWrapperChangeEvent = 'BackboneCollectionWrapper:change';
 
 	if ( !Ractive || !Backbone ) {
 		throw new Error( 'Could not find Ractive or Backbone! Check your paths config' );
@@ -149,13 +150,18 @@
 	BackboneCollectionWrapper = function ( ractive, collection, keypath ) {
 		this.value = collection;
 
-		collection.on( 'add remove reset sort', this.changeHandler = function () {
+		var changeHandler = this.changeHandler = function () {
+			if ( isLocked( collection, 'syncSuccess' ) ) {
+				return;
+			}
+
 			// TODO smart merge. It should be possible, if awkward, to trigger smart
 			// updates instead of a blunderbuss .set() approach
 			var release = acquireLock( collection, 'set' );
 			ractive.set( keypath, collection.models );
 			release();
-		});
+		};
+		collection.on( 'add remove reset sort ' + BackboneCollectionWrapperChangeEvent, changeHandler);
 
 		if ( !collection.hasOwnProperty( originalSyncProperty ) ) {
 			// Patch sync method if not patched
@@ -170,6 +176,8 @@
 						var release = acquireLock( collection, 'syncSuccess' );
 						var result = originalSuccess.apply( this, arguments );
 						release();
+						// Notify all `BackboneCollectionWrapper`s about change
+						collection.trigger( BackboneCollectionWrapperChangeEvent );
 						return result;
 					};
 				}
