@@ -81,7 +81,7 @@
 		throw new Error( 'Could not find Ractive or Backbone! Check your paths config' );
 	}
 
-	function acquireLock( key, name ) {
+	function acquireLock ( key, name ) {
 		var namedLockProperty = lockProperty + ( name || '' );
 		key[ namedLockProperty ] = ( key[ namedLockProperty ] || 0 ) + 1;
 		return function release() {
@@ -92,9 +92,18 @@
 		};
 	}
 
-	function isLocked( key, name ) {
+	function isLocked ( key, name ) {
 		var namedLockProperty = lockProperty + ( name || '' );
 		return !!key[ namedLockProperty ];
+	}
+
+	function onOff ( obj /* on/off() parameters */ ) {
+		var onOffArgs = Array.prototype.slice.call( arguments, 1 );
+
+		obj.on.apply( obj, onOffArgs );
+		return function off () {
+			obj.off.apply( obj, onOffArgs );
+		};
 	}
 
 	Ractive.adaptors.Backbone = {
@@ -113,16 +122,16 @@
 	BackboneModelWrapper = function ( ractive, model, keypath, prefix ) {
 		this.value = model;
 
-		model.on( 'change', this.modelChangeHandler = function () {
+		this.off = onOff( model, 'change', function () {
 			var release = acquireLock( model, 'set' );
 			ractive.set( prefix( model.changed ) );
 			release();
-		});
+		} );
 	};
 
 	BackboneModelWrapper.prototype = {
 		teardown: function () {
-			this.value.off( 'change', this.modelChangeHandler );
+			this.off();
 		},
 		get: function () {
 			return this.value.attributes;
@@ -150,7 +159,7 @@
 	BackboneCollectionWrapper = function ( ractive, collection, keypath ) {
 		this.value = collection;
 
-		var changeHandler = this.changeHandler = function () {
+		function changeHandler () {
 			if ( isLocked( collection, 'syncSuccess' ) ) {
 				return;
 			}
@@ -160,8 +169,8 @@
 			var release = acquireLock( collection, 'set' );
 			ractive.set( keypath, collection.models );
 			release();
-		};
-		collection.on( 'add remove reset sort ' + BackboneCollectionWrapperChangeEvent, changeHandler);
+		}
+		this.off = onOff( collection, 'add remove reset sort ' + BackboneCollectionWrapperChangeEvent, changeHandler );
 
 		if ( !collection.hasOwnProperty( originalSyncProperty ) ) {
 			// Patch sync method if not patched
@@ -205,7 +214,7 @@
 				}
 			}
 
-			this.value.off( 'add remove reset sort ' + BackboneCollectionWrapperChangeEvent, this.changeHandler );
+			this.off();
 		},
 		get: function () {
 			return this.value.models;
