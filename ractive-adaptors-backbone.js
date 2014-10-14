@@ -205,7 +205,7 @@
 				}
 			}
 
-			this.value.off( 'add remove reset sort', this.changeHandler );
+			this.value.off( 'add remove reset sort ' + BackboneCollectionWrapperChangeEvent, this.changeHandler );
 		},
 		get: function () {
 			return this.value.models;
