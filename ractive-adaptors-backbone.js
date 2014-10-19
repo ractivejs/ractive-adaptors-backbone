@@ -74,7 +74,7 @@
 
 	var BackboneModelWrapper, BackboneCollectionWrapper;
 	var lockProperty = '_ractiveAdaptorsBackboneLock';
-	var originalSyncProperty = '_ractiveAdaptorsBackboneOriginalSync';
+	var originalSetProperty = '_ractiveAdaptorsBackboneOriginalSet';
 	var BackboneCollectionWrapperChangeEvent = 'BackboneCollectionWrapper:change';
 
 	if ( !Ractive || !Backbone ) {
@@ -160,7 +160,7 @@
 		this.value = collection;
 
 		function changeHandler () {
-			if ( isLocked( collection, 'syncSuccess' ) ) {
+			if ( isLocked( collection, 'setSuccess' ) ) {
 				return;
 			}
 
@@ -172,45 +172,38 @@
 		}
 		this.off = onOff( collection, 'add remove reset sort ' + BackboneCollectionWrapperChangeEvent, changeHandler );
 
-		if ( !collection.hasOwnProperty( originalSyncProperty ) ) {
-			// Patch sync method if not patched
-			var originalSync = collection.sync;
-			collection[ originalSyncProperty ] = collection.hasOwnProperty('sync') ? originalSync : null;
-			collection.sync = function ractivePatchedSync( method, model, options ) {
-				options = options || {};
+		if ( !collection.hasOwnProperty( originalSetProperty ) ) {
+			// Patch set method if not patched
+			var originalSet = collection.set;
+			collection[ originalSetProperty ] = collection.hasOwnProperty('set') ? originalSet : null;
 
-				var originalSuccess = options.success;
-				if ( originalSuccess ) {
-					options.success = function ( resp ) {
-						var release = acquireLock( collection, 'syncSuccess' );
-						var result = originalSuccess.apply( this, arguments );
-						release();
-						// Notify all `BackboneCollectionWrapper`s about change
-						collection.trigger( BackboneCollectionWrapperChangeEvent );
-						return result;
-					};
-				}
+			collection.set = function ractivePatchedSet() {
+				var release = acquireLock( collection, 'setSuccess' );
+				var result = originalSet.apply( this, arguments );
+				release();
 
-				return originalSync.apply( this, arguments );
+				// Notify all `BackboneCollectionWrapper`s about change
+				collection.trigger( BackboneCollectionWrapperChangeEvent );
+				return result;
 			};
 		}
-		this.releaseSyncPatch = acquireLock( collection, 'syncPatch' );	// Count patch users
+		this.releaseSetPatch = acquireLock( collection, 'setPatch' );	// Count patch users
 	};
 
 	BackboneCollectionWrapper.prototype = {
 		teardown: function () {
 			var collection = this.value;
 
-			this.releaseSyncPatch();
-			if ( !isLocked( collection, 'syncPatch' ) ) {
-				// Cleanup, return original sync
-				if ( collection[ originalSyncProperty ] ) {
+			this.releaseSetPatch();
+			if ( !isLocked( collection, 'setPatch' ) ) {
+				// Cleanup, return original set
+				if ( collection[ originalSetProperty ] ) {
 					// We had object-owned method
-					collection.sync = collection[ originalSyncProperty ];
-					delete collection[ originalSyncProperty ];
+					collection.set = collection[ originalSetProperty ];
+					delete collection[ originalSetProperty ];
 				} else {
 					// Use prototype method
-					delete collection.sync;
+					delete collection.set;
 				}
 			}
 
