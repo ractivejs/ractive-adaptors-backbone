@@ -1,11 +1,15 @@
 root = true
 
 [*]
+indent_style = tab
 end_of_line = lf
 insert_final_newline = true
 
 [*.js]
-indent_style = tab
-
-[*.json]
-indent_style = tab
+; npmjs.org/package/codepainter
+quote_type = single
+space_after_anonymous_functions = true
+space_after_control_statements = true
+spaces_around_operators = true
+trim_trailing_whitespace = true
+spaces_in_brackets = hybrid
