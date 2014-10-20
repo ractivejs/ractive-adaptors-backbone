@@ -72,24 +72,38 @@
 
 	'use strict';
 
-	var BackboneModelWrapper, BackboneCollectionWrapper, lockProperty = '_ractiveAdaptorsBackboneLock';
+	var BackboneModelWrapper, BackboneCollectionWrapper;
+	var lockProperty = '_ractiveAdaptorsBackboneLock';
+	var originalSetProperty = '_ractiveAdaptorsBackboneOriginalSet';
+	var BackboneCollectionWrapperChangeEvent = 'BackboneCollectionWrapper:change';
 
 	if ( !Ractive || !Backbone ) {
 		throw new Error( 'Could not find Ractive or Backbone! Check your paths config' );
 	}
 
-	function acquireLock( key ) {
-		key[lockProperty] = ( key[lockProperty] || 0 ) + 1;
+	function acquireLock ( key, name ) {
+		var namedLockProperty = lockProperty + ( name || '' );
+		key[ namedLockProperty ] = ( key[ namedLockProperty ] || 0 ) + 1;
 		return function release() {
-			key[lockProperty] -= 1;
-			if ( !key[lockProperty] ) {
-				delete key[lockProperty];
+			key[ namedLockProperty ] -= 1;
+			if ( !key[ namedLockProperty ] ) {
+				delete key[ namedLockProperty ];
 			}
 		};
 	}
 
-	function isLocked( key ) {
-		return !!key[lockProperty];
+	function isLocked ( key, name ) {
+		var namedLockProperty = lockProperty + ( name || '' );
+		return !!key[ namedLockProperty ];
+	}
+
+	function onOff ( obj /* on/off() parameters */ ) {
+		var onOffArgs = Array.prototype.slice.call( arguments, 1 );
+
+		obj.on.apply( obj, onOffArgs );
+		return function off () {
+			obj.off.apply( obj, onOffArgs );
+		};
 	}
 
 	Ractive.adaptors.Backbone = {
@@ -108,16 +122,16 @@
 	BackboneModelWrapper = function ( ractive, model, keypath, prefix ) {
 		this.value = model;
 
-		model.on( 'change', this.modelChangeHandler = function () {
-			var release = acquireLock( model );
+		this.off = onOff( model, 'change', function () {
+			var release = acquireLock( model, 'set' );
 			ractive.set( prefix( model.changed ) );
 			release();
-		});
+		} );
 	};
 
 	BackboneModelWrapper.prototype = {
 		teardown: function () {
-			this.value.off( 'change', this.modelChangeHandler );
+			this.off();
 		},
 		get: function () {
 			return this.value.attributes;
@@ -125,7 +139,7 @@
 		set: function ( keypath, value ) {
 			// Only set if the model didn't originate the change itself, and
 			// only if it's an immediate child property
-			if ( !isLocked( this.value ) && keypath.indexOf( '.' ) === -1 ) {
+			if ( !isLocked( this.value, 'set' ) && keypath.indexOf( '.' ) === -1 ) {
 				this.value.set( keypath, value );
 			}
 		},
@@ -145,24 +159,61 @@
 	BackboneCollectionWrapper = function ( ractive, collection, keypath ) {
 		this.value = collection;
 
-		collection.on( 'add remove reset sort', this.changeHandler = function () {
+		function changeHandler () {
+			if ( isLocked( collection, 'setSuccess' ) ) {
+				return;
+			}
+
 			// TODO smart merge. It should be possible, if awkward, to trigger smart
 			// updates instead of a blunderbuss .set() approach
-			var release = acquireLock( collection );
+			var release = acquireLock( collection, 'set' );
 			ractive.set( keypath, collection.models );
 			release();
-		});
+		}
+		this.off = onOff( collection, 'add remove reset sort ' + BackboneCollectionWrapperChangeEvent, changeHandler );
+
+		if ( !collection.hasOwnProperty( originalSetProperty ) ) {
+			// Patch set method if not patched
+			var originalSet = collection.set;
+			collection[ originalSetProperty ] = collection.hasOwnProperty('set') ? originalSet : null;
+
+			collection.set = function ractivePatchedSet() {
+				var release = acquireLock( collection, 'setSuccess' );
+				var result = originalSet.apply( this, arguments );
+				release();
+
+				// Notify all `BackboneCollectionWrapper`s about change
+				collection.trigger( BackboneCollectionWrapperChangeEvent );
+				return result;
+			};
+		}
+		this.releaseSetPatch = acquireLock( collection, 'setPatch' );	// Count patch users
 	};
 
 	BackboneCollectionWrapper.prototype = {
 		teardown: function () {
-			this.value.off( 'add remove reset sort', this.changeHandler );
+			var collection = this.value;
+
+			this.releaseSetPatch();
+			if ( !isLocked( collection, 'setPatch' ) ) {
+				// Cleanup, return original set
+				if ( collection[ originalSetProperty ] ) {
+					// We had object-owned method
+					collection.set = collection[ originalSetProperty ];
+					delete collection[ originalSetProperty ];
+				} else {
+					// Use prototype method
+					delete collection.set;
+				}
+			}
+
+			this.off();
 		},
 		get: function () {
 			return this.value.models;
 		},
 		reset: function ( models ) {
-			if ( isLocked( this.value ) ) {
+			if ( isLocked( this.value, 'set' ) ) {
 				return;
 			}
 
