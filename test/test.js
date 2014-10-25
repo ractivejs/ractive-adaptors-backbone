@@ -163,9 +163,12 @@ tests( 'Ractive-adaptors-backbone', function ( Ractive, Backbone ) {
 			expect( ractive.toHTML() ).eql( 'Miles' );
 		});
 
-		it( 'listens to the new model', function () {
+		it( 'listens to the new model', function ( done ) {
 			newModel.set( 'name', 'Frank' );
-			expect( ractive.toHTML() ).eql( 'Frank' );
+			nextTick( function() {
+				expect( ractive.toHTML() ).eql( 'Frank' );
+				done();
+			} );
 		});
 	});
 
@@ -192,25 +195,37 @@ tests( 'Ractive-adaptors-backbone', function ( Ractive, Backbone ) {
 			list.reset( [ { name: 'Moe' }, { name: 'Larry' }, { name: 'Curly' } ] );
 		});
 
-		it( 'works', function () {
-			expect( ractive.toHTML() ).eql( 'MoeLarryCurly' );
+		it( 'works', function ( done ) {
+			nextTick( function() {
+				expect( ractive.toHTML() ).eql( 'MoeLarryCurly' );
+				done();
+			} );
 		});
 
-		it( 'responds to model changes', function () {
+		it( 'responds to model changes', function ( done ) {
 			var moe = list.at( 0 );
 			moe.set( 'name', 'Joe' );
-			expect( ractive.toHTML() ).eql( 'JoeLarryCurly' );
+			nextTick( function() {
+				expect( ractive.toHTML() ).eql( 'JoeLarryCurly' );
+				done();
+			} );
 		});
 
-		it( 'responds to deletions', function () {
+		it( 'responds to deletions', function ( done ) {
 			var moe = list.at( 0 );
 			list.remove( moe );
-			expect( ractive.toHTML() ).eql( 'LarryCurly' );
+			nextTick( function() {
+				expect( ractive.toHTML() ).eql( 'LarryCurly' );
+				done();
+			} );
 		});
 
-		it( 'responds to additions', function () {
+		it( 'responds to additions', function ( done ) {
 			list.push({ name: 'Susy' });
-			expect( ractive.toHTML() ).eql( 'MoeLarryCurlySusy' );
+			nextTick( function() {
+				expect( ractive.toHTML() ).eql( 'MoeLarryCurlySusy' );
+				done();
+			} );
 		});
 
 		it( 'handles resets to array', function () {
@@ -256,14 +271,20 @@ tests( 'Ractive-adaptors-backbone', function ( Ractive, Backbone ) {
 			expect( ractive.toHTML() ).eql( 'hello' );
 		});
 
-		it( 'responds to changes in submodel', function () {
+		it( 'responds to changes in submodel', function ( done ) {
 			submodel.set( 'message', 'hola' );
-			expect( ractive.toHTML() ).eql( 'hola' );
+			nextTick( function() {
+				expect( ractive.toHTML() ).eql( 'hola' );
+				done();
+			} );
 		});
 
-		it( 'responds to sublist additions', function () {
+		it( 'responds to sublist additions', function ( done ) {
 			sublist.push( new Backbone.Model({ message: 'howdy' }) );
-			expect( ractive.toHTML() ).eql( 'hellohowdy' );
+			nextTick( function() {
+				expect( ractive.toHTML() ).eql( 'hellohowdy' );
+				done();
+			} );
 		});
 
 		it( 'responds to sublist deletions', function () {
@@ -275,3 +296,7 @@ tests( 'Ractive-adaptors-backbone', function ( Ractive, Backbone ) {
 	});
 
 });
+
+function nextTick ( fn ) {
+	setTimeout( fn, 0 );
+}
