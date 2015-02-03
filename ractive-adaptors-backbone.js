@@ -120,7 +120,7 @@
 			this.value.off( 'change', this.modelChangeHandler );
 		},
 		get: function () {
-			return this.value.attributes;
+			return this.value.toJSON();
 		},
 		set: function ( keypath, value ) {
 			// Only set if the model didn't originate the change itself, and

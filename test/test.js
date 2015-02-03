@@ -136,6 +136,23 @@ tests( 'Ractive-adaptors-backbone', function ( Ractive, Backbone ) {
 			expect( model.get('message') ).eql( 'hello' );
 		});
 
+		it( 'uses .toJSON() to fetch model attributes', function(next) {
+			var Model = Backbone.Model.extend({
+				toJSON: function() {
+					return {
+						fullname: this.attributes.firstname + ' ' + this.attributes.lastname
+					}
+				}
+			});
+
+			model = new Model({ firstname: 'Joe', lastname: 'Doe' });
+
+			ractive.set( 'model', model );
+
+			expect( ractive.get('model.fullname') ).eql( 'Joe Doe' );
+
+			next();
+		});
 	});
 
 	/*
