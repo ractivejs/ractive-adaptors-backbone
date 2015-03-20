@@ -35,12 +35,14 @@ tests( 'Ractive-adaptors-backbone', function ( Ractive, Backbone ) {
 	 */
 
 	before(function () {
-		proxy( '../ractive-adaptors-backbone.js', {
+		Adaptor = proxy( '../dist/ractive-adaptors-backbone.js', {
 			ractive: Ractive,
 			backbone: Backbone
 		});
 
-		Adaptor = Ractive.adaptors.Backbone;
+		Adaptor.init( Backbone );
+
+		Ractive.adaptors.Backbone = Adaptor;
 		Ractive.defaults.adapt.push( 'Backbone' );
 	});
 
