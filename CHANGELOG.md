@@ -1,3 +1,9 @@
+## v0.3.0 - April 6, 2015
+
+* Adaptor no longer self-registers in a module environment, and no longer has a dependency on Ractive or Backbone (@rich-harris, #31)
+
+* Internal: Rewrote as ES6 module (@rich-harris, #31)
+
 ## v0.2.0 - October 4, 2014
 
 This release brings better compatibility with Ractive 0.6.x and Backbone 1.1.x.

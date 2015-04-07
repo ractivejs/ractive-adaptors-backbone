@@ -1,9 +1,10 @@
 {
   "name": "ractive-adaptors-backbone",
   "description": "Backbone adaptor for Ractive.js",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "http://ractivejs.org",
   "main": "dist/ractive-adaptors-backbone.js",
+  "jsnext:main": "src/ractive-adaptors-backbone.js",
   "author": {
     "name": "Rich Harris"
   },
@@ -22,7 +23,7 @@
   },
   "scripts": {
     "build": "rm -rf dist; gobble build dist",
-    "test": "jshint dist/ractive-adaptors-backbone.js && mocha",
+    "test": "jshint src/ractive-adaptors-backbone.js && mocha",
     "coverage": "(cp rdist/active-adaptors-backbone.js dist/ractive-adaptors-backbone.js~; jscoverage rdist/active-adaptors-backbone.js; mv dist/ractive-adaptors-backbone-cov.js dist/ractive-adaptors-backbone.js; mocha -R html-cov > coverage.html); mv dist/ractive-adaptors-backbone.js~ dist/ractive-adaptors-backbone.js",
     "prepublish": "npm run build; uglifyjs -m < dist/ractive-adaptors-backbone.js > dist/ractive-adaptors-backbone.min.js"
   },

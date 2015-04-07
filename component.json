@@ -2,7 +2,7 @@
   "name": "ractive-adaptors-backbone",
   "repository": "ractivejs/ractive-adaptors-backbone",
   "description": "Backbone adaptor for Ractive.js",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "keywords": [
     "backbone",
     "ractive",
@@ -13,8 +13,8 @@
   "dependencies": {
     "ractivejs/ractive": "*"
   },
-  "main": "ractive-adaptors-backbone.js",
+  "main": "dist/ractive-adaptors-backbone.js",
   "scripts": [
-    "ractive-adaptors-backbone.js"
+    "dist/ractive-adaptors-backbone.js"
   ]
 }

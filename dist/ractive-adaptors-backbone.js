@@ -4,7 +4,6 @@
 	global.Ractive.adaptors.Backbone = factory()
 }(this, function () { 'use strict';
 
-	var Backbone = undefined;
 	var lockProperty = "_ractiveAdaptorsBackboneLock";
 
 	function acquireLock(key) {
@@ -22,28 +21,23 @@
 	}
 
 	var adaptor = {
-		init: function init(ref) {
-			Backbone = ref;
-		},
+		// self-init, if being used as a <script> tag
+		Backbone: typeof window !== "undefined" && window.Backbone || null,
+
 		filter: function filter(object) {
-			if (!Backbone) {
+			if (!adaptor.Backbone) {
 				throw new Error("Could not find Backbone. You must call adaptor.init(Backbone) - see http://TKTKTK.com for more information");
 			}
-			return object instanceof Backbone.Model || object instanceof Backbone.Collection;
+			return object instanceof adaptor.Backbone.Model || object instanceof adaptor.Backbone.Collection;
 		},
 		wrap: function wrap(ractive, object, keypath, prefix) {
-			if (object instanceof Backbone.Model) {
+			if (object instanceof adaptor.Backbone.Model) {
 				return new BackboneModelWrapper(ractive, object, keypath, prefix);
 			}
 
 			return new BackboneCollectionWrapper(ractive, object, keypath, prefix);
 		}
 	};
-
-	// self-init, if being used as a <script> tag
-	if (typeof window !== "undefined" && window.Backbone) {
-		Backbone = window.Backbone;
-	}
 
 	function BackboneModelWrapper(ractive, model, keypath, prefix) {
 		this.value = model;
@@ -56,10 +50,10 @@
 	}
 
 	BackboneModelWrapper.prototype = {
-		teardown: function ractive_adaptors_backbone__teardown() {
+		teardown: function teardown() {
 			this.value.off("change", this.modelChangeHandler);
 		},
-		get: function ractive_adaptors_backbone__get() {
+		get: function get() {
 			return this.value.toJSON();
 		},
 		set: function set(keypath, value) {
@@ -69,10 +63,10 @@
 				this.value.set(keypath, value);
 			}
 		},
-		reset: function ractive_adaptors_backbone__reset(object) {
+		reset: function reset(object) {
 			// If the new object is a Backbone model, assume this one is
 			// being retired. Ditto if it's not a model at all
-			if (object instanceof Backbone.Model || !(object instanceof Object)) {
+			if (object instanceof adaptor.Backbone.Model || !(object instanceof Object)) {
 				return false;
 			}
 
@@ -95,20 +89,20 @@
 	}
 
 	BackboneCollectionWrapper.prototype = {
-		teardown: function ractive_adaptors_backbone__teardown() {
+		teardown: function teardown() {
 			this.value.off("add remove reset sort", this.changeHandler);
 		},
-		get: function ractive_adaptors_backbone__get() {
+		get: function get() {
 			return this.value.models;
 		},
-		reset: function ractive_adaptors_backbone__reset(models) {
+		reset: function reset(models) {
 			if (isLocked(this.value)) {
 				return;
 			}
 
 			// If the new object is a Backbone collection, assume this one is
 			// being retired. Ditto if it's not a collection at all
-			if (models instanceof Backbone.Collection || Object.prototype.toString.call(models) !== "[object Array]") {
+			if (models instanceof adaptor.Backbone.Collection || Object.prototype.toString.call(models) !== "[object Array]") {
 				return false;
 			}
 
