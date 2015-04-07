@@ -40,7 +40,7 @@ tests( 'Ractive-adaptors-backbone', function ( Ractive, Backbone ) {
 			backbone: Backbone
 		});
 
-		Adaptor.init( Backbone );
+		Adaptor.Backbone = Backbone;
 
 		Ractive.adaptors.Backbone = Adaptor;
 		Ractive.defaults.adapt.push( 'Backbone' );
