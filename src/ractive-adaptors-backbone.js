@@ -20,7 +20,7 @@ const adaptor = {
 
 	filter ( object ) {
 		if ( !adaptor.Backbone ) {
-			throw new Error( 'Could not find Backbone. You must call adaptor.init(Backbone) - see http://TKTKTK.com for more information' );
+			throw new Error( 'Could not find Backbone. You must do `adaptor.Backbone = Backbone` - see https://github.com/ractivejs/ractive-adaptors-backbone#installation for more information' );
 		}
 		return object instanceof adaptor.Backbone.Model || object instanceof adaptor.Backbone.Collection;
 	},
