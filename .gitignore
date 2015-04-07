@@ -1,4 +1,4 @@
-.*
+.gobble-build
 !.gitignore
 node_modules/
 tmp/
