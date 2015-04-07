@@ -1,4 +1,5 @@
-.DS_Store
+.gobble-build
+!.gitignore
 node_modules/
 tmp/
 coverage.html

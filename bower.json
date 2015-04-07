@@ -1,10 +1,10 @@
 {
 	"name": "ractive-backbone",
 	"description": "Backbone adaptor for Ractive.js",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"author": "Rich Harris",
 	"license": "MIT",
-	"main": "ractive-adaptors-backbone.js",
+	"main": "dist/ractive-adaptors-backbone.js",
 	"ignore": [
 		"**/.*",
 		"src",

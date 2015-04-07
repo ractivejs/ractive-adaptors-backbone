@@ -6,7 +6,8 @@ var proxy     = require( 'proxyquire' );
 
 var libs = {
 	ractive: {
-		'0.6.0': require( '../vendor/ractive/ractive-edge.js' ),
+		'0.7.2': require( '../vendor/ractive/ractive-0.7.2.js' ),
+		'0.6.0': require( '../vendor/ractive/ractive-0.6.0.js' ),
 		'0.5.8': require( '../vendor/ractive/ractive-0.5.8.js' ),
 		'0.5.0': require( '../vendor/ractive/ractive-0.5.0.js' ),
 		'0.4.0': require( '../vendor/ractive/ractive-0.4.0.js' ),
@@ -35,12 +36,14 @@ tests( 'Ractive-adaptors-backbone', function ( Ractive, Backbone ) {
 	 */
 
 	before(function () {
-		proxy( '../ractive-adaptors-backbone.js', {
+		Adaptor = proxy( '../dist/ractive-adaptors-backbone.js', {
 			ractive: Ractive,
 			backbone: Backbone
 		});
 
-		Adaptor = Ractive.adaptors.Backbone;
+		Adaptor.Backbone = Backbone;
+
+		Ractive.adaptors.Backbone = Adaptor;
 		Ractive.defaults.adapt.push( 'Backbone' );
 	});
 
