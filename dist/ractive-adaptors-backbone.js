@@ -26,7 +26,7 @@
 
 		filter: function filter(object) {
 			if (!adaptor.Backbone) {
-				throw new Error("Could not find Backbone. You must call adaptor.init(Backbone) - see http://TKTKTK.com for more information");
+				throw new Error("Could not find Backbone. You must do `adaptor.Backbone = Backbone` - see https://github.com/ractivejs/ractive-adaptors-backbone#installation for more information");
 			}
 			return object instanceof adaptor.Backbone.Model || object instanceof adaptor.Backbone.Collection;
 		},
@@ -58,8 +58,8 @@
 		},
 		set: function set(keypath, value) {
 			// Only set if the model didn't originate the change itself, and
-			// only if it's an immediate child property
-			if (!isLocked(this.value) && keypath.indexOf(".") === -1) {
+			// only if it's an immediate child property or a model supporting associations
+			if (!isLocked(this.value) && ("AssociatedModel" in adaptor.Backbone && this.value instanceof adaptor.Backbone.AssociatedModel || keypath.indexOf(".") === -1)) {
 				this.value.set(keypath, value);
 			}
 		},
