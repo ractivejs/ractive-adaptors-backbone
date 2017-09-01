@@ -21,7 +21,7 @@ To get ractive-adaptors-backbone you can:
 
 #### Use CDN
 
-    //cdn.jsdelivr.net/ractive.adaptors-backbone/latest/ractive-adaptors-backbone.min.js
+    https://cdn.jsdelivr.net/npm/ractive-adaptors-backbone@0.3.0/dist/ractive-adaptors-backbone.min.js
 
 #### Use bower
 
