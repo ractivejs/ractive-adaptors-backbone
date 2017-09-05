@@ -52,8 +52,8 @@ BackboneModelWrapper.prototype = {
 	},
 	set ( keypath, value ) {
 		// Only set if the model didn't originate the change itself, and
-		// only if it's an immediate child property
-		if ( !isLocked( this.value ) && keypath.indexOf( '.' ) === -1 ) {
+		// only if it's an immediate child property or a model supporting associations
+		if ( !isLocked( this.value ) && (( 'AssociatedModel' in adaptor.Backbone && this.value instanceof adaptor.Backbone.AssociatedModel ) || keypath.indexOf( '.' ) === -1 ) ) {
 			this.value.set( keypath, value );
 		}
 	},
