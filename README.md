@@ -49,7 +49,8 @@ var ractive = new Ractive({
   template: '<h1>Hello {{user.name}}!</h1>',
   data: {
     user: user
-  }
+  },
+  adapt: [Ractive.adaptors.Backbone]
 });
 
 // If you interact with the model, the view will change
